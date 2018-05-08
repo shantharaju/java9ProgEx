@@ -1,0 +1,50 @@
+import java.util.concurrent.TimeUnit
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {    
+    testCompile 'org.testng:testng:6.10'
+}
+
+//This will force the tests to always execute by clearing out the test cache
+test.dependsOn 'cleanTest'
+
+test {
+    useTestNG()
+
+    //Interceptors
+    beforeTest { desc ->
+       println "\n*** Starting execution of test ${desc.className}.${desc.name} ***"
+    }
+    afterTest { descriptor, result ->
+        println "<<< Test ${descriptor.name} resulted in ${result.resultType} and took "+getElaspedTime(result.endTime - result.startTime)+" >>>\n"
+    }
+
+    //Modify the test logging
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat "full"
+    }
+}
+
+//Example of being able to use methods inside the build file
+def getElaspedTime(def time) {
+    if(time / 1000 < 1)
+    {
+        return String.format("0 min, %.3f sec", time/1000)
+    }
+    else
+    {
+        return String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes(time),
+                TimeUnit.MILLISECONDS.toSeconds(time) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time))
+
+        )
+    }
+}
