@@ -1,5 +1,8 @@
 package coderust.tree;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class BinaryTree<T extends Comparable<T>> {
 	Node<T> root;
 
@@ -101,6 +104,7 @@ public class BinaryTree<T extends Comparable<T>> {
 
 	public void printInOrder() {
 		printInOrderRecursive(root);
+		System.out.println();
 	}
 	private void printInOrderRecursive(Node<T> current) {
 		if(current == null) {
@@ -109,6 +113,25 @@ public class BinaryTree<T extends Comparable<T>> {
 		printInOrderRecursive(current.left);
 		System.out.print(current.data + ",");
 		printInOrderRecursive(current.right);
+	}
+	public void printLevelOrder() {
+		if(root == null) {
+			return;
+		}
+		Queue<Node<T>> q = new LinkedList<>();
+		q.add(root);
+		
+		while(!q.isEmpty()) {
+			Node<T> n = q.remove();
+			System.out.print(n.data + ",");
+			if(n.left != null) {
+				q.add(n.left);
+			}
+			if(n.right != null) {
+				q.add(n.right);
+			}
+		}
+		System.out.println();
 	}
 	public static void main(String[] args) {
 		BinaryTree<Integer> bt = new BinaryTree<>();
@@ -122,5 +145,6 @@ public class BinaryTree<T extends Comparable<T>> {
 	    System.out.println(bt.contains(8));
 	    bt.delete(5);
 	    bt.printInOrder();
+	    bt.printLevelOrder();
 	}
 }
