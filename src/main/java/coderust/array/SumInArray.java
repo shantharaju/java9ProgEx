@@ -46,7 +46,6 @@ public class SumInArray {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		int[] arr = { 1, 4, 4, 45, 6, 10, -8 };
 		int val = 5;
 		System.out.println(new SumInArray().findSum(arr, val));
